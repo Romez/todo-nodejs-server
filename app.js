@@ -1,3 +1,5 @@
+var md5 = require('md5');
+var jwt = require('jsonwebtoken');
 var config = require('./config');
 
 var restify = require('restify');
@@ -47,6 +49,16 @@ var pool = mysql.createPool(config.db);
 var tasks = require('./models/tasks')(pool);
 var tasksController = require('./controllers/tasksController')(tasks);
 
-rest.get('/tasks', tasksController.findAll);
-rest.post('/', tasksController.findAll);
+var user = require('./models/users')(pool);
+var usersController = require('./controllers/usersController')(user, md5, jwt, config);
+rest.post('/users/auth', usersController.auth);
+rest.get('/users', usersController.checkAuth, usersController.findAll);
 
+rest.get('/tasks', usersController.checkAuth, tasksController.findAll);
+rest.post('/tasks', usersController.checkAuth, tasksController.findAll);
+
+var rubrics = require('./models/rubrics')(pool);
+var rubricsController = require('./controllers/rubricsController')(rubrics);
+
+rest.get('/rubrics', rubricsController.findAll);
+rest.get('/rubrics/:slug', rubricsController.findOne);
