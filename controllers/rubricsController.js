@@ -10,7 +10,6 @@ module.exports = function (rubrics) {
     };
 
     var findOne = function(req, res) {
-        console.log(  );
         rubrics.one(req.params.slug, function (err, rubric) {
             if(err) {
                 res.send(500, {error: err});
@@ -20,5 +19,15 @@ module.exports = function (rubrics) {
         });
     };
 
-    return {findAll, findOne};
+    var findArticles = function(req, res) {
+        rubrics.getRubricArticles(req.params.slug, function (err, rubricArticles) {
+            if(err) {
+                res.send(500, {error: err});
+            } else {
+                res.send(200, {rubricArticles});
+            }
+        });
+    };
+
+    return {findAll, findOne, findArticles};
 };

@@ -12,6 +12,20 @@ module.exports = function (pool) {
                     callback(err, result[0])
                 }
             );
-        }
+        },
+
+        getRubricArticles: function (slug, callback) {
+        pool.query(
+            'SELECT ' +
+            'a.id as article_id, ' +
+            'title, ' +
+            'body, ' +
+            'created_at ' +
+            'FROM articles a ' +
+            'LEFT JOIN rubrics r ON( a.rubric_id = r.id ) ' +
+            'WHERE ?',
+            {slug: slug}, callback
+        );
+    }
     };
 };

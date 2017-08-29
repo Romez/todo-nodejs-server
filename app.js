@@ -62,3 +62,15 @@ var rubricsController = require('./controllers/rubricsController')(rubrics);
 
 rest.get('/rubrics', rubricsController.findAll);
 rest.get('/rubrics/:slug', rubricsController.findOne);
+rest.get('/rubric-articles/:slug', rubricsController.findArticles);
+
+
+var Validator =  require('validator');
+var articles = require('./models/articles')(pool);
+var lodash = require('lodash');
+var articlesController = require('./controllers/articlesController')(articles, Validator, lodash);
+
+rest.get('/articles', articlesController.findAll);
+rest.get('/article/:id', articlesController.findOne);
+rest.get('/articles/:slug', articlesController.findBy);
+rest.post('/articles/add', articlesController.add);

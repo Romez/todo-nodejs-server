@@ -5,10 +5,12 @@
   "main": "index.js",
   "dependencies": {
     "jsonwebtoken": "^7.4.3",
+    "lodash": "^4.17.4",
     "md5": "^2.2.1",
     "mysql": "^2.14.1",
     "passport": "^0.4.0",
-    "restify": "^5.2.0"
+    "restify": "^5.2.0",
+    "validator": "^8.1.0"
   },
   "devDependencies": {},
   "scripts": {
