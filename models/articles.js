@@ -1,7 +1,8 @@
 module.exports = function (pool) {
     return {
         list: function (callback) {
-            pool.query('SELECT * FROM articles', callback);
+            pool.query('SELECT a.id as id, r.name as rubric, a.title, a.body, a.created_at FROM articles a ' +
+                'LEFT JOIN rubrics r ON(a.rubric_id = r.id)', callback);
         },
 
         one: function (id, callback) {
@@ -24,8 +25,23 @@ module.exports = function (pool) {
         add: function (data, callback) {
             pool.query(
                 'INSERT INTO articles(title, body, rubric_id, created_at)' + 'VALUES (?, ?, ?, ?)',
-                [data.title, data.body, data.rubric,  data.created_at],
+                [data.title, data.body, data.rubric,  data.createdAt],
                 callback
+            );
+        },
+
+        edit: function (data, callback) {
+            pool.query(
+                'UPDATE articles SET title=?, body=?, created_at=? where id=?',
+                [data.title, data.body, data.createdAt, data.id],
+                callback
+            );
+        },
+
+        deleteOne: function (id, callback) {
+            pool.query(
+                'DELETE FROM articles WHERE id=?',
+                [id], callback
             );
         },
     };

@@ -29,14 +29,11 @@ module.exports = function (users, md5, jwt, config) {
     var checkAuth = function (req, res, next) {
         var token = (req.body && req.body.token) || (req.query.token) || req.headers['x-access-token'];
         if (token) {
-            // verifies secret and checks exp
             jwt.verify(token, config.auth.secret, function(err, user) {
                 if (err) {
                     return res.send(401, { success: false, message: 'Failed to authenticate token.' });
                 } else {
-                    // if everything is good, save to request for use in other routes
                     req.user = user;
-                    console.log('token again', user);
                     next();
                 }
             });

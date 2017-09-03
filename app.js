@@ -1,6 +1,8 @@
 var md5 = require('md5');
 var jwt = require('jsonwebtoken');
 var config = require('./config');
+var lodash = require('lodash');
+var Validator =  require('validator');
 
 var restify = require('restify');
 var rest = restify.createServer({
@@ -58,19 +60,21 @@ rest.get('/tasks', usersController.checkAuth, tasksController.findAll);
 rest.post('/tasks', usersController.checkAuth, tasksController.findAll);
 
 var rubrics = require('./models/rubrics')(pool);
-var rubricsController = require('./controllers/rubricsController')(rubrics);
-
+var rubricsController = require('./controllers/rubricsController')(rubrics, Validator, lodash);
 rest.get('/rubrics', rubricsController.findAll);
 rest.get('/rubrics/:slug', rubricsController.findOne);
 rest.get('/rubric-articles/:slug', rubricsController.findArticles);
+rest.put('/rubric/add', usersController.checkAuth, rubricsController.add);
+rest.post('/rubric/edit', usersController.checkAuth, rubricsController.edit);
+rest.del('/rubric/:slug', usersController.checkAuth, rubricsController.deleteOne);
 
 
-var Validator =  require('validator');
 var articles = require('./models/articles')(pool);
-var lodash = require('lodash');
 var articlesController = require('./controllers/articlesController')(articles, Validator, lodash);
-
 rest.get('/articles', articlesController.findAll);
 rest.get('/article/:id', articlesController.findOne);
 rest.get('/articles/:slug', articlesController.findBy);
-rest.post('/articles/add', articlesController.add);
+rest.post('/articles/add', usersController.checkAuth, articlesController.add);
+rest.post('/article/edit', usersController.checkAuth, articlesController.edit);
+rest.del('/article/:id', usersController.checkAuth, articlesController.deleteOne);
+

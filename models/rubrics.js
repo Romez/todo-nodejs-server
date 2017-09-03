@@ -14,18 +14,49 @@ module.exports = function (pool) {
             );
         },
 
+        oneBy: function (data, id, callback) {
+            pool.query(
+                'SELECT * FROM rubrics WHERE ? AND id != ?',
+                [data, id],
+                function (err, result) {
+                    callback(err, result[0])
+                }
+            );
+        },
+
         getRubricArticles: function (slug, callback) {
-        pool.query(
-            'SELECT ' +
-            'a.id as article_id, ' +
-            'title, ' +
-            'body, ' +
-            'created_at ' +
-            'FROM articles a ' +
-            'LEFT JOIN rubrics r ON( a.rubric_id = r.id ) ' +
-            'WHERE ?',
-            {slug: slug}, callback
-        );
-    }
+            pool.query(
+                'SELECT ' +
+                'a.id as article_id, ' +
+                'title, ' +
+                'body, ' +
+                'created_at ' +
+                'FROM articles a ' +
+                'LEFT JOIN rubrics r ON( a.rubric_id = r.id ) ' +
+                'WHERE ?',
+                {slug: slug}, callback
+            );
+        },
+
+        add: function (data, callback) {
+            pool.query(
+                'INSERT INTO rubrics(name, slug)' + 'VALUES (?, ?)',
+                [data.name, data.slug], callback
+            );
+        },
+
+        deleteOne: function (slug, callback) {
+            pool.query(
+                'DELETE FROM rubrics WHERE slug=?',
+                [slug], callback
+            );
+        },
+
+        edit: function (data, callback) {
+            pool.query(
+                'UPDATE rubrics SET name=?, slug=? WHERE id=?',
+                [data.name, data.slug, data.id], callback
+            );
+        },
     };
 };
