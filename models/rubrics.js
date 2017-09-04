@@ -26,13 +26,7 @@ module.exports = function (pool) {
 
         getRubricArticles: function (slug, callback) {
             pool.query(
-                'SELECT ' +
-                'a.id as article_id, ' +
-                'title, ' +
-                'created_at ' +
-                'FROM articles a ' +
-                'LEFT JOIN rubrics r ON( a.rubric_id = r.id ) ' +
-                'WHERE ?',
+                'SELECT * FROM articles_list WHERE ?',
                 {slug: slug}, callback
             );
         },
