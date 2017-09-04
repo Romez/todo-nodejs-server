@@ -6,7 +6,7 @@ module.exports = function (pool) {
 
         one: function (id, callback) {
             pool.query(
-                'SELECT * FROM articles WHERE ?',
+                'SELECT * FROM v_articles WHERE ?',
                 {id: id},
                 function (err, result) {
                     callback(err, result[0])
