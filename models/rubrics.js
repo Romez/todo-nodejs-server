@@ -29,7 +29,6 @@ module.exports = function (pool) {
                 'SELECT ' +
                 'a.id as article_id, ' +
                 'title, ' +
-                'body, ' +
                 'created_at ' +
                 'FROM articles a ' +
                 'LEFT JOIN rubrics r ON( a.rubric_id = r.id ) ' +
