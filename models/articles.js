@@ -1,8 +1,7 @@
 module.exports = function (pool) {
     return {
         list: function (callback) {
-            pool.query('SELECT a.id as id, r.name as rubric, a.title, a.body, a.created_at FROM articles a ' +
-                'LEFT JOIN rubrics r ON(a.rubric_id = r.id)', callback);
+            pool.query('SELECT * FROM articles_list', callback);
         },
 
         one: function (id, callback) {
