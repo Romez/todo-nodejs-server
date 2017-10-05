@@ -1,7 +1,7 @@
 module.exports = function (pool) {
     return {
         list: function (callback) {
-            pool.query('SELECT * FROM articles_list', callback);
+            pool.query('SELECT * FROM articles', callback);
         },
 
         one: function (id, callback) {

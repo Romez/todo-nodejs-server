@@ -30,7 +30,7 @@ module.exports = function (articles, Validator, lodash) {
     };
 
     function validateData(data) {
-        let errors = {};
+        var errors = {};
 
         if (Validator.isEmpty(data.title)) {
             errors.title = 'Поле обязательно ';

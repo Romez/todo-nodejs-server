@@ -78,3 +78,40 @@ rest.post('/articles/add', usersController.checkAuth, articlesController.add);
 rest.post('/article/edit', usersController.checkAuth, articlesController.edit);
 rest.del('/article/:id', usersController.checkAuth, articlesController.deleteOne);
 
+var chat = require('./models/chat')(pool);
+var chatController = require('./controllers/chatController')(chat);
+rest.get('/chat', chatController.getHistory);
+
+const io = require('socket.io')(rest.server);
+const socketioJwt   = require("socketio-jwt");
+
+io.use(socketioJwt.authorize({
+    secret: config.auth.secret,
+    handshake: true
+}));
+
+io.on('connection', function (socket) {
+
+    io.emit('user enter', socket.decoded_token.username);
+
+
+    socket.on('connect', function () {
+        console.log('user connected')
+    });
+
+    socket.on('disconnect', function () {
+        msg = `${socket.decoded_token.username}: покинул чат`;
+        io.emit('chat message', msg);
+    });
+
+    socket.on('chat message', function (msg) {
+        msg = `${socket.decoded_token.username}: ${msg}`;
+        io.emit('chat message', msg);
+    });
+
+    socket.on('chat history', function (msg) {
+        console.log('message: '+msg);
+        io.emit('chat message', msg);
+    });
+});
+
